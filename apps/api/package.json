@@ -1,0 +1,42 @@
+{
+  "name": "@kestrel/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "migrate": "tsx src/scripts/migrate.ts"
+  },
+  "dependencies": {
+    "fastify": "^4.28.0",
+    "fastify-plugin": "^4.5.1",
+    "@fastify/cors": "^9.0.1",
+    "pg": "^8.11.5",
+    "ioredis": "^5.4.1",
+    "bullmq": "^5.12.0",
+    "zod": "^3.23.8",
+    "pino": "^9.2.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "octokit": "^4.0.2",
+    "@octokit/auth-app": "^7.1.1",
+    "dotenv": "^16.4.5",
+    "@kestrel/event-schemas": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsx": "^4.16.2",
+    "vitest": "^2.0.5",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@types/node": "^20.14.13",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6"
+  }
+}

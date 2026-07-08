@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Env files — .env.example is the only one that should ever be committed
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS/editor cruft
+.DS_Store
+.vscode/
+.idea/
+
+# Test/coverage
+coverage/
+
+# Anything the migration runner or local dev might create
+/apps/api/migrations/*.sql.bak

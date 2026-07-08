@@ -1,0 +1,28 @@
+# Opt-in override that enables real sandboxed test execution.
+#
+# ⚠️  SECURITY WARNING — READ THIS BEFORE USING
+# This mounts the HOST'S Docker socket (/var/run/docker.sock) into the
+# orchestrator container. A process with access to the Docker socket can
+# effectively do anything root on the host can do (launch privileged
+# containers, mount the host filesystem, etc.) — this is NOT the sandboxed
+# isolation described in docs/architecture/09-security-architecture.md.
+# It is a reasonable trade-off for a single trusted user running Kestrel
+# against their own repos on their own machine. It is NOT appropriate for
+# any multi-tenant or untrusted-input deployment — that requires the
+# Firecracker/gVisor microVM fleet described in the architecture docs
+# (real infrastructure, not a config file).
+#
+# Usage:
+#   docker compose -f infra/docker-compose.yml -f infra/docker-compose.sandbox.yml up --build
+#
+# Also requires EXECUTION_MODE=docker and a configured GITHUB_APP_ID /
+# GITHUB_APP_PRIVATE_KEY in your .env — see .env.example.
+
+version: "3.9"
+
+services:
+  orchestrator:
+    environment:
+      EXECUTION_MODE: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

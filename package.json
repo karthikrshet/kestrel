@@ -1,0 +1,14 @@
+{
+  "name": "kestrel",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build:packages": "pnpm --filter @kestrel/event-schemas run build",
+    "dev": "pnpm run build:packages && pnpm --parallel --filter ./apps/* dev",
+    "lint": "pnpm --filter ./apps/* lint",
+    "typecheck": "pnpm run build:packages && pnpm --filter ./apps/* typecheck",
+    "test": "pnpm run build:packages && pnpm --filter ./apps/* test",
+    "build": "pnpm run build:packages && pnpm --filter ./apps/* build",
+    "migrate": "pnpm --filter @kestrel/api exec tsx src/scripts/migrate.ts"
+  }
+}

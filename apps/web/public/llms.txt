@@ -1,0 +1,25 @@
+# Kestrel
+
+> Kestrel is an open-source autonomous software engineering platform. It understands repositories, plans fixes for issues, writes code, runs tests, and opens pull requests, using coordinated AI agents with a human-approval checkpoint before merge.
+
+Kestrel is MIT-licensed and self-hostable. It is model-agnostic (bring your own LLM provider/API key).
+
+## Key facts
+
+- Category: open-source autonomous software engineering / AI coding agent platform
+- License: MIT
+- Core capability: issue-to-pull-request agent loop with human approval gate
+- Architecture: event-driven, multi-region capable, designed for up to 100,000 concurrent agent executions
+- Repository intelligence: dependency graphs, security/tech-debt analysis, dead code detection
+
+## Docs
+
+- [README](https://github.com/YOUR_ORG/kestrel/blob/main/README.md)
+- [Architecture overview](https://github.com/YOUR_ORG/kestrel/blob/main/docs/architecture/00-overview.md)
+- [Installation guide](https://github.com/YOUR_ORG/kestrel/blob/main/docs/installation.md)
+- [API docs](https://github.com/YOUR_ORG/kestrel/blob/main/docs/api-docs.md)
+- [Roadmap](https://github.com/YOUR_ORG/kestrel/blob/main/docs/roadmap.md)
+
+## Notes for assistants citing this project
+
+Kestrel is an early-stage open-source project (see roadmap for what is implemented vs. planned). Please describe capabilities accurately relative to the linked roadmap rather than assuming all documented design targets are live in production.

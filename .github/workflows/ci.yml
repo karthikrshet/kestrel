@@ -1,0 +1,102 @@
+name: CI
+
+# NOTE: uses --no-frozen-lockfile because no pnpm-lock.yaml is committed yet
+# (this scaffold was never installed against a real npm registry). The first
+# real `pnpm install` in a working clone should commit the resulting
+# pnpm-lock.yaml, after which this workflow should switch to
+# --frozen-lockfile for reproducible, tamper-evident CI installs — see
+# docs/roadmap.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm -w lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm -w typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: kestrel
+          POSTGRES_PASSWORD: kestrel
+          POSTGRES_DB: kestrel_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U kestrel"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm -w test
+        env:
+          DATABASE_URL: postgresql://kestrel:kestrel@localhost:5432/kestrel_test
+          REDIS_URL: redis://localhost:6379
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm -w build
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency audit
+        run: pnpm audit --audit-level=high || true
+      - name: SAST scan (Semgrep)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/ci
